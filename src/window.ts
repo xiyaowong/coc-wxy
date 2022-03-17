@@ -25,6 +25,30 @@ class Window {
     }
   }
 
+  public async showErrorMessage(message: string, ...items: string[]): Promise<string | undefined> {
+    if (items.length == 0) {
+      this.showMessage(message, 'error');
+      return;
+    }
+    const that = window as any;
+    if (!that.enableMessageDialog) return (await that.showConfirm(message, items, 'Error')) as any;
+    const texts = typeof items[0] === 'string' ? items : (items as any[]).map((s) => s.title);
+    const idx = await that.createNotification('CocErrorFloat', message, texts);
+    return idx == -1 ? undefined : items[idx];
+  }
+
+  public async showWarningMessage(message: string, ...items: string[]): Promise<string | undefined> {
+    if (items.length == 0) {
+      this.showMessage(message, 'warning');
+      return;
+    }
+    const that = window as any;
+    if (!that.enableMessageDialog) return (await that.showConfirm(message, items, 'Warning')) as any;
+    const texts = typeof items[0] === 'string' ? items : (items as any[]).map((s) => s.title);
+    const idx = await that.createNotification('CocWarningFloat', message, texts);
+    return idx == -1 ? undefined : items[idx];
+  }
+
   public async showQuickpick(items: string[], placeholder = 'Choose one'): Promise<number> {
     const that = window as any;
     const release = await that.mutex.acquire();
