@@ -14,4 +14,5 @@ export async function activate(context: ExtensionContext): Promise<void> {
   window.showQuickpick = myWindow.showQuickpick;
   window.showErrorMessage = myWindow.showErrorMessage;
   window.showWarningMessage = myWindow.showWarningMessage;
+  window.showNotification = myWindow.showNotification;
 }

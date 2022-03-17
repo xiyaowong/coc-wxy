@@ -1,4 +1,4 @@
-import { commands, Disposable, MsgTypes, window } from 'coc.nvim';
+import { commands, Disposable, MsgTypes, NotificationConfig, window } from 'coc.nvim';
 import { getRandomCommandID, luacall } from './utils';
 
 enum MessageLevel {
@@ -79,6 +79,12 @@ class Window {
       release();
       return -1;
     }
+  }
+
+  public async showNotification(config: NotificationConfig): Promise<boolean> {
+    // NOTE: this will ignore callbacks, close button
+    luacall('vim.notify', [config.content, 'info', config]);
+    return true;
   }
 }
 
