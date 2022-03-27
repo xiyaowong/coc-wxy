@@ -15,4 +15,5 @@ export async function activate(context: ExtensionContext): Promise<void> {
   window.showErrorMessage = myWindow.showErrorMessage;
   window.showWarningMessage = myWindow.showWarningMessage;
   window.showNotification = myWindow.showNotification;
+  window.requestInput = myWindow.requestInput;
 }

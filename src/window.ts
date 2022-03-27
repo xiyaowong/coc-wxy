@@ -86,6 +86,35 @@ class Window {
     luacall('vim.notify', [config.content, 'info', config]);
     return true;
   }
+
+  public async requestInput(title: string, defaultValue?: string): Promise<string> {
+    const that = window as any;
+    const release = await that.mutex.acquire();
+    try {
+      const command_id = getRandomCommandID('input');
+      await luacall("require('coc-wxy').input", [title, defaultValue, command_id]);
+      let command: Disposable;
+      const promise = new Promise<string>((resolve) => {
+        command = commands.registerCommand(
+          command_id,
+          (res) => {
+            command.dispose();
+            resolve(res);
+          },
+          null,
+          true
+        );
+      });
+
+      const res = await promise;
+      release();
+      return res;
+    } catch (e) {
+      release();
+    }
+
+    return '';
+  }
 }
 
 export const myWindow = new Window();

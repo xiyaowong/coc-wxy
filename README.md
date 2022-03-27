@@ -11,3 +11,4 @@ ui overrides:
 | window.showErrorMessage   | vim.notify    |
 | window.showNotification   | vim.notify    |
 | window.showQuickpick      | vim.ui.select |
+| window.requestInput       | vim.ui.input  |

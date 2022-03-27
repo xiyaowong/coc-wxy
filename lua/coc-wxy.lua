@@ -12,4 +12,10 @@ function M.quickpick(title, items, command_id)
 	end)
 end
 
+function M.input(title, default, command_id)
+	vim.ui.input({ prompt = title, default = default }, function(text)
+		CocAction("runCommand", command_id, text)
+	end)
+end
+
 return M
