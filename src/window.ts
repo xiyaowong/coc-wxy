@@ -1,5 +1,5 @@
-import { commands, Disposable, MsgTypes, NotificationConfig, window } from 'coc.nvim';
-import { getRandomCommandID, luacall } from './utils';
+import { MsgTypes, NotificationConfig, window } from 'coc.nvim';
+import { getCommandResult, getRandomCommandID, luacall, ui } from './utils';
 
 enum MessageLevel {
   More,
@@ -57,22 +57,8 @@ class Window {
       items = items.map((s, idx) => `${idx + 1}. ${s}`);
 
       const command_id = getRandomCommandID('quickpick');
-      await luacall("require('coc-wxy').quickpick", [title, items.map((s) => s.trim()), command_id]);
-
-      let command: Disposable;
-      const promise = new Promise<number>((resolve) => {
-        command = commands.registerCommand(
-          command_id,
-          (res) => {
-            command.dispose();
-            resolve(res);
-          },
-          null,
-          true
-        );
-      });
-
-      const res = await promise;
+      luacall(ui.quickpick, [title, items.map((s) => s.trim()), command_id]);
+      const res = await getCommandResult<number>(command_id);
       release();
       return res;
     } catch (e) {
@@ -92,21 +78,8 @@ class Window {
     const release = await that.mutex.acquire();
     try {
       const command_id = getRandomCommandID('input');
-      await luacall("require('coc-wxy').input", [title, defaultValue, command_id]);
-      let command: Disposable;
-      const promise = new Promise<string>((resolve) => {
-        command = commands.registerCommand(
-          command_id,
-          (res) => {
-            command.dispose();
-            resolve(res);
-          },
-          null,
-          true
-        );
-      });
-
-      const res = await promise;
+      luacall(ui.input, [title, defaultValue, command_id]);
+      const res = await getCommandResult<string>(command_id);
       release();
       return res;
     } catch (e) {

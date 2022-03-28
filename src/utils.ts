@@ -1,4 +1,4 @@
-import { VimValue, workspace } from 'coc.nvim';
+import { VimValue, workspace, commands, Disposable } from 'coc.nvim';
 import { v1 as uuidv1 } from 'uuid';
 
 const COMMAND_PREFIX = 'wxy';
@@ -21,3 +21,23 @@ export function luacall(
 export function getRandomCommandID(scope?: string): string {
   return scope && scope.length > 0 ? `${COMMAND_PREFIX}.${scope}.${uuidv1()}` : `${COMMAND_PREFIX}.${uuidv1()}`;
 }
+
+export async function getCommandResult<T>(commandID: string): Promise<T> {
+  let command: Disposable;
+  return new Promise<T>((resolve) => {
+    command = commands.registerCommand(
+      commandID,
+      (res) => {
+        command.dispose();
+        resolve(res);
+      },
+      null,
+      true
+    );
+  });
+}
+
+export const ui = {
+  quickpick: "require('coc-wxy').quickpick",
+  input: "require('coc-wxy').input",
+};
