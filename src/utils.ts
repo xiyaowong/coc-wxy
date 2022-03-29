@@ -1,7 +1,7 @@
 import { VimValue, workspace, commands, Disposable } from 'coc.nvim';
 import { v1 as uuidv1 } from 'uuid';
 
-const COMMAND_PREFIX = 'wxy';
+const COMMAND_PREFIX = 'ui';
 
 export function luacall(fname: string, args?: VimValue | VimValue[]): Promise<any>;
 export function luacall(fname: string, args: VimValue | VimValue[], isNotify: true): null;
@@ -38,6 +38,7 @@ export async function getCommandResult<T>(commandID: string): Promise<T> {
 }
 
 export const ui = {
-  quickpick: "require('coc-wxy').quickpick",
-  input: "require('coc-wxy').input",
+  quickpick: "require('coc_ui').quickpick",
+  input: "require('coc_ui').input",
+  notify: "require('coc_ui').notify",
 };

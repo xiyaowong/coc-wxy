@@ -21,7 +21,7 @@ class Window {
         break;
     }
     if (level >= messageLevel) {
-      luacall('vim.notify', [msg, level + 2, { title: 'coc.nvim', timeout: 1000 }], true);
+      luacall(ui.notify, [msg, level + 2, { title: 'coc.nvim', timeout: 1000 }], true);
     }
   }
 
@@ -69,7 +69,7 @@ class Window {
 
   public async showNotification(config: NotificationConfig): Promise<boolean> {
     // NOTE: this will ignore callbacks, close button
-    luacall('vim.notify', [config.content, 'info', config]);
+    luacall(ui.notify, [config.content, 'info', config]);
     return true;
   }
 
